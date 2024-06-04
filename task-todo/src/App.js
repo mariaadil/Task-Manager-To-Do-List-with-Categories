@@ -12,7 +12,7 @@ import Footer from './Component/Footer';
 import AboutUs from './Pages/LearnMore'; 
 import Services from './Pages/OurServices'; 
 import Contact from './Pages/GetInTouch'; 
-
+import View from './Component/View';
 const App = () => {
   const [user, setUser] = useState(null);
 
@@ -66,6 +66,7 @@ const App = () => {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/" element={<ToDoList tasks={filteredTasks} />} />
           <Route path="/aboutus" element={<AboutUs />} />
+          <Route path="/view" element={<View tasks={tasks} categories={categories} filterTasks={filterTasks} />} />
           <Route path="/services" element={<Services />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>
@@ -78,6 +79,8 @@ const App = () => {
                 <ToDoItem key={task.id} task={task} />
               ))}
             </div>
+            <button onClick={() => window.location.href = '/view'}>View Tasks</button>
+
           </>
         )}
         <Footer />
