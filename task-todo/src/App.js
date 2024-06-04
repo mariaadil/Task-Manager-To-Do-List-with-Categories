@@ -12,6 +12,7 @@ import Footer from './Component/Footer';
 import AboutUs from './Pages/LearnMore'; 
 import Services from './Pages/OurServices'; 
 import Contact from './Pages/GetInTouch'; 
+import Profile from './Pages/Profile'; // Import the Profile component
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -45,7 +46,7 @@ const App = () => {
   const addTask = (newTask) => {
     const updatedTasks = [...tasks, newTask];
     setTasks(updatedTasks);
-    filterTasks('All'); // To show updated task list
+    filterTasks(''); // To show updated task list
   };
 
   const filterTasks = (category) => {
@@ -64,6 +65,7 @@ const App = () => {
         <Routes>
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/profile" element={<Profile />} /> {/* Add route for the Profile component */}
           <Route path="/" element={<ToDoList tasks={filteredTasks} />} />
           <Route path="/aboutus" element={<AboutUs />} />
           <Route path="/services" element={<Services />} />
