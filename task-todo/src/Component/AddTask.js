@@ -54,3 +54,4 @@ const AddTask = ({ addTask, categories }) => {
 };
 
 export default AddTask;
+
