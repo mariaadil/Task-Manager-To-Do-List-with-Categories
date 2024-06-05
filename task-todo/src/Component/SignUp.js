@@ -25,7 +25,8 @@ const SignUp = () => {
 
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      navigate('/add-task');
+      // Redirect to task manager after signing up
+      navigate('/task-manager');
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
         setError('This email is already in use. Please use a different email.');
@@ -41,26 +42,34 @@ const SignUp = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-semibold mb-4">Sign Up</h2>
-      {error && <p className="text-red-500 mb-4">{error}</p>}
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-        className="w-full px-3 py-2 border rounded mb-4"
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-        className="w-full px-3 py-2 border rounded mb-4"
-      />
-      <button onClick={handleSignUp} className="bg-blue-600 text-white px-4 py-2 rounded">
-        Sign Up
-      </button>
+    <div className="container mx-auto px-4 py-8">
+      <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
+        <h2 className="text-3xl font-semibold text-center text-gray-800 mb-6">Sign Up</h2>
+        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
+          className="w-full px-4 py-3 border rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+          className="w-full px-4 py-3 border rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <button 
+          onClick={handleSignUp} 
+          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+        >
+          Sign Up
+        </button>
+        <p className="text-sm mt-4 text-gray-600 text-center">
+          Already have an account? <a href="/signin" className="text-blue-500 hover:underline">Sign in here</a>
+        </p>
+      </div>
     </div>
   );
 };

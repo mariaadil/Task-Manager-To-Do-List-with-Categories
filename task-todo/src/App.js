@@ -1,90 +1,76 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import { auth } from './Firebase/Firebase'; 
 import Header from './Component/Header';
 import ToDoList from './Component/ToDo-List';
-import ToDoItem from './Component/ToDoItem';
 import AddTask from './Component/AddTask';
-import CategoryFilter from './Component/CategoryFilter';
 import SignIn from './Component/SignIn';
 import SignUp from './Component/SignUp';
 import Footer from './Component/Footer'; 
+import Profile from './Component/Profile';
 import AboutUs from './Pages/LearnMore'; 
-import Services from './Pages/OurServices'; 
+import Services from './Pages/OurServices';
 import Contact from './Pages/GetInTouch'; 
-import Profile from './Pages/Profile'; // Import the Profile component
+import ViewTasks from './Component/View';
+import Home from './Component/Home';
 
 const App = () => {
   const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        setUser(user);
-      } else {
-        setUser(null);
-      }
-    });
-    return () => unsubscribe();
-  }, []);
-
   const [tasks, setTasks] = useState([]);
-  const [categories, setCategories] = useState(['All']); // Initialize with 'All'
+  const [categories, setCategories] = useState(['All']);
   const [filteredTasks, setFilteredTasks] = useState([]);
 
   useEffect(() => {
-    // Fetch tasks from database
-    const fetchedTasks = []; // Example tasks fetched from database
+    const unsubscribe = auth.onAuthStateChanged(setUser);
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const fetchedTasks = []; 
+    const fetchedCategories = ['All', 'Work', 'Personal']; 
     setTasks(fetchedTasks);
     setFilteredTasks(fetchedTasks);
-
-    // Fetch categories from database
-    const fetchedCategories = ['All', 'Work', 'Personal']; // Example categories fetched from database
     setCategories(fetchedCategories);
   }, []);
 
   const addTask = (newTask) => {
-    const updatedTasks = [...tasks, newTask];
-    setTasks(updatedTasks);
-    filterTasks(''); // To show updated task list
+    setTasks([...tasks, newTask]);
+    filterTasks('All');
   };
 
   const filterTasks = (category) => {
-    if (category === 'All') {
-      setFilteredTasks(tasks);
-    } else {
-      const filtered = tasks.filter((task) => task.category === category);
-      setFilteredTasks(filtered);
-    }
+    setFilteredTasks(category === 'All' ? tasks : tasks.filter(task => task.category === category));
   };
 
   return (
     <Router>
-      <div className="App">
-        <Header user={user} />
-        <Routes>
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/profile" element={<Profile />} /> {/* Add route for the Profile component */}
-          <Route path="/" element={<ToDoList tasks={filteredTasks} />} />
-          <Route path="/aboutus" element={<AboutUs />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
-        {user && (
-          <>
-            <AddTask addTask={addTask} categories={categories} />
-            <CategoryFilter categories={categories} filterTasks={filterTasks} />
-            <div>
-              {filteredTasks.map((task) => (
-                <ToDoItem key={task.id} task={task} />
-              ))}
-            </div>
-          </>
-        )}
-        <Footer />
-      </div>
-    </Router>
+  <div className="bg-gray-100 min-h-screen">
+    <Header user={user} />
+    <div className="container mx-auto px-4 py-8">
+      <Routes>
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/" element={<Home user={user} addTask={addTask} />} />
+        <Route path="/aboutus" element={<AboutUs />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/view-tasks" element={<ViewTasks tasks={filteredTasks} categories={categories} filterTasks={filterTasks} />} />
+        <Route path="/task-manager" element={<TaskManager addTask={addTask} tasks={tasks} />} />
+      </Routes>
+    </div>
+    <Footer />
+  </div>
+</Router>
+  );
+};
+
+const TaskManager = ({ addTask, tasks }) => {
+  return (
+    <div className="max-w-lg mx-auto">
+      <AddTask onAddTask={addTask} />
+      <ToDoList tasks={tasks} />
+    </div>
   );
 };
 

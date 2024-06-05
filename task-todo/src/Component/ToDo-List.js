@@ -1,3 +1,4 @@
+// ToDoList.js
 import React, { useState, useEffect } from 'react';
 import ToDoItem from './ToDoItem';
 import { db } from '../Firebase/Firebase';
@@ -35,8 +36,6 @@ const ToDoList = () => {
         <p className="text-center mt-4 text-gray-500">Loading...</p>
       ) : error ? (
         <p className="text-center mt-4 text-red-500">{error}</p>
-      ) : realtimeTasks.length === 0 ? (
-        <p className="text-center mt-4 text-gray-500">No tasks available</p>
       ) : (
         realtimeTasks.map((task) => <ToDoItem key={task.id} task={task} />)
       )}
